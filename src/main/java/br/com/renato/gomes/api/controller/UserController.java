@@ -1,6 +1,8 @@
 package br.com.renato.gomes.api.controller;
 
 import br.com.renato.gomes.api.domain.User;
+import br.com.renato.gomes.api.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id){
-        return ResponseEntity.ok().body(new User(1L, "", "", ""));
+        return ResponseEntity.ok().body(userService.findById(id));
     }
 }
