@@ -3,6 +3,7 @@ package br.com.renato.gomes.api.service.impl;
 import br.com.renato.gomes.api.domain.User;
 import br.com.renato.gomes.api.repository.UserRepository;
 import br.com.renato.gomes.api.service.UserService;
+import br.com.renato.gomes.api.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User userCreate(User user) {
-        return null;
+        return this.userRepository.save(user);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return this.userRepository.findById(id).orElse(null);
+        return this.userRepository.findById(id).orElseThrow(()-> new ObjectNotFoundException("Registro não encontrado."));
     }
 
     @Override
