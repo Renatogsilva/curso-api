@@ -7,7 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +24,10 @@ public class UserController {
     private ModelMapper mapper;
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user){
-        return ResponseEntity.ok().body(userService.userCreate(user));
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDto){
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}").buildAndExpand(this.userService.userCreate(userDto).getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping(value = "/{id}")

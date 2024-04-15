@@ -1,14 +1,15 @@
 package br.com.renato.gomes.api.service.impl;
 
 import br.com.renato.gomes.api.domain.User;
+import br.com.renato.gomes.api.domain.dto.UserDTO;
 import br.com.renato.gomes.api.repository.UserRepository;
 import br.com.renato.gomes.api.service.UserService;
 import br.com.renato.gomes.api.service.exceptions.ObjectNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,14 +18,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
-    public User userCreate(User user) {
-        return this.userRepository.save(user);
+    public User userCreate(UserDTO userDto) {
+        return this.userRepository.save(mapper.map(userDto, User.class));
     }
 
     @Override
-    public User userUpdate(User user) {
-        return null;
+    public User userUpdate(UserDTO userDto) {
+        return this.userRepository.save(mapper.map(userDto, User.class));
     }
 
     @Override
