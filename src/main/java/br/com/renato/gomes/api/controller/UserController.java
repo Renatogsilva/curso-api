@@ -30,6 +30,12 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto){
+        dto.setId(id);
+        return ResponseEntity.ok().body(mapper.map(this.userService.userUpdate(dto), UserDTO.class));
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(mapper.map(userService.findById(id), UserDTO.class));
