@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
 
+    public static final String ID = "/{id}";
     @Autowired
     private UserService userService;
 
@@ -30,13 +31,13 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = ID)
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto){
         dto.setId(id);
         return ResponseEntity.ok().body(mapper.map(this.userService.userUpdate(dto), UserDTO.class));
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = ID)
     public ResponseEntity<UserDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(mapper.map(userService.findById(id), UserDTO.class));
     }
@@ -46,5 +47,11 @@ public class UserController {
         List<UserDTO> listDto = userService.findAll().stream().map(x -> mapper.map(x, UserDTO.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(listDto);
+    }
+
+    @DeleteMapping(value = ID)
+    public ResponseEntity<UserDTO> delete(@PathVariable Long id){
+        this.userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

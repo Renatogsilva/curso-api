@@ -46,8 +46,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User delete(Long id) {
-        return null;
+    public void delete(Long id) {
+        this.findById(id);
+        this.userRepository.deleteById(id);
     }
 
     private void findByEmail(UserDTO dto){
