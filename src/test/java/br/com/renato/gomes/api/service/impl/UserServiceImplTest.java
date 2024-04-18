@@ -4,7 +4,6 @@ import br.com.renato.gomes.api.domain.User;
 import br.com.renato.gomes.api.domain.dto.UserDTO;
 import br.com.renato.gomes.api.repository.UserRepository;
 import br.com.renato.gomes.api.service.exceptions.ObjectNotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.util.Assert;
 
 import java.util.Optional;
 
@@ -24,6 +22,7 @@ class UserServiceImplTest {
     public static final String NAME = "Valdir";
     public static final String EMAIL = "emaill@email.com";
     public static final String PASSWORD = "154562";
+    public static final String REGISTRO_NAO_ENCONTRADO = "Registro não encontrado.";
     @InjectMocks
     private UserServiceImpl service;
 
@@ -68,13 +67,13 @@ class UserServiceImplTest {
 
     @Test
     void whenFindByIdThenReturnAnObjectNotFoundException(){
-        Mockito.when(this.repository.findById(Mockito.anyLong())).thenThrow(new ObjectNotFoundException("Registro não encontrado."));
+        Mockito.when(this.repository.findById(Mockito.anyLong())).thenThrow(new ObjectNotFoundException(REGISTRO_NAO_ENCONTRADO));
 
         try{
             service.findById(ID);
         }catch (Exception ex){
             assertEquals(ObjectNotFoundException.class, ex.getClass());
-            assertEquals("Registro não encontrado.", ex.getMessage());
+            assertEquals(REGISTRO_NAO_ENCONTRADO, ex.getMessage());
         }
     }
 
