@@ -81,7 +81,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void thenFindAllThenReturnAnListOfUsers() {
+    void whenFindAllThenReturnAnListOfUsers() {
         Mockito.when(this.repository.findAll()).thenReturn(List.of(user));
 
         List<User> response = this.service.findAll();
@@ -92,6 +92,16 @@ class UserServiceImplTest {
         assertEquals(ID, response.get(INDEX).getId());
         assertEquals(NAME, response.get(INDEX).getName());
         assertEquals(EMAIL, response.get(INDEX).getEmail());
+    }
+
+    @Test
+    void whenFindAllThenReturnAnListOfUserZero(){
+        Mockito.when(this.repository.findAll()).thenReturn(List.of());
+
+        List<User> response = this.service.findAll();
+
+        assertNotNull(response);
+        assertEquals(0, response.size());
     }
 
     @Test
