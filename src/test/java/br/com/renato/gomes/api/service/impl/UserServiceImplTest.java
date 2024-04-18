@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +24,8 @@ class UserServiceImplTest {
     public static final String EMAIL = "emaill@email.com";
     public static final String PASSWORD = "154562";
     public static final String REGISTRO_NAO_ENCONTRADO = "Registro não encontrado.";
+    public static final int INDEX = 0;
+
     @InjectMocks
     private UserServiceImpl service;
 
@@ -78,7 +81,17 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void thenFindAllThenReturnAnListOfUsers() {
+        Mockito.when(this.repository.findAll()).thenReturn(List.of(user));
+
+        List<User> response = this.service.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(User.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getName());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
     }
 
     @Test
