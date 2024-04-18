@@ -3,6 +3,7 @@ package br.com.renato.gomes.api.service.impl;
 import br.com.renato.gomes.api.domain.User;
 import br.com.renato.gomes.api.domain.dto.UserDTO;
 import br.com.renato.gomes.api.repository.UserRepository;
+import br.com.renato.gomes.api.service.exceptions.DataIntegratyViolationException;
 import br.com.renato.gomes.api.service.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ class UserServiceImplTest {
     public static final String PASSWORD = "154562";
     public static final String REGISTRO_NAO_ENCONTRADO = "Registro não encontrado.";
     public static final int INDEX = 0;
+    public static final String E_MAIL_JA_CADASTRADO_NO_SISTEMA = "E-mail já cadastrado no sistema.";
 
     @InjectMocks
     private UserServiceImpl service;
@@ -58,6 +60,19 @@ class UserServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegratyViolationException(){
+        Mockito.when(this.repository.findByEmail(Mockito.anyString())).thenReturn(optionalUser);
+
+        try{
+            optionalUser.get().setId(8L);
+            this.service.userCreate(dto);
+        }catch (Exception ex){
+            assertEquals(E_MAIL_JA_CADASTRADO_NO_SISTEMA, ex.getMessage());
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+        }
     }
 
     @Test
