@@ -5,6 +5,7 @@ import br.com.renato.gomes.api.domain.dto.UserDTO;
 import br.com.renato.gomes.api.repository.UserRepository;
 import br.com.renato.gomes.api.service.exceptions.DataIntegratyViolationException;
 import br.com.renato.gomes.api.service.exceptions.ObjectNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -151,7 +152,13 @@ class UserServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void deleteWhitSuccess() {
+        Mockito.when(this.repository.findById(Mockito.anyLong())).thenReturn(optionalUser);
+        Mockito.doNothing().when(this.repository).deleteById(Mockito.anyLong());
+
+        this.service.delete(ID);
+
+        Mockito.verify(this.repository, Mockito.times(1)).deleteById(Mockito.anyLong());
     }
 
     private void startUsers(){
