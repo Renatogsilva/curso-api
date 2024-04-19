@@ -3,6 +3,7 @@ package br.com.renato.gomes.api.controller;
 import br.com.renato.gomes.api.domain.User;
 import br.com.renato.gomes.api.domain.dto.UserDTO;
 import br.com.renato.gomes.api.service.UserService;
+import br.com.renato.gomes.api.service.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -66,6 +67,18 @@ class UserControllerTest {
         assertEquals(ID, response.getBody().getId());
         assertEquals(NAME, response.getBody().getName());
         assertEquals(EMAIL, response.getBody().getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException(){
+        Mockito.when(this.service.findById(Mockito.anyLong())).thenThrow(new ObjectNotFoundException("Registro não encontrado"));
+
+        try{
+            ResponseEntity<UserDTO> response = this.controller.findById(ID);
+        }catch (Exception ex){
+            assertEquals("Registro não encontrado", ex.getMessage());
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+        }
     }
 
     @Test
