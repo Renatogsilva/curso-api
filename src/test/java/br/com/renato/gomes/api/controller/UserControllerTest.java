@@ -48,7 +48,15 @@ class UserControllerTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnCreated() {
+        Mockito.when(this.service.userCreate(dto)).thenReturn(user);
+
+        ResponseEntity<UserDTO> response = this.controller.create(dto);
+
+        assertNotNull(response.getHeaders().get("location"));
+        assertNull(response.getBody());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
     }
 
     @Test
