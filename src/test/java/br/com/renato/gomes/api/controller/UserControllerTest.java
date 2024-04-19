@@ -128,7 +128,16 @@ class UserControllerTest {
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSuccess() {
+        Mockito.doNothing().when(this.service).delete(Mockito.anyLong());
+
+        ResponseEntity<UserDTO> response = this.controller.delete(ID);
+
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+        Mockito.verify(this.service, Mockito.times(1)).delete(Mockito.anyLong());
     }
 
     private void startUser(){
