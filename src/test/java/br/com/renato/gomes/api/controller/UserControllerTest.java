@@ -12,8 +12,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +85,23 @@ class UserControllerTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAListOfUserDto() {
+        Mockito.when(this.service.findAll()).thenReturn(List.of(user));
+        Mockito.when(this.mapper.map(Mockito.any(), Mockito.any())).thenReturn(dto);
+
+        ResponseEntity<List<UserDTO>> response = this.controller.findAll();
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().size());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(ArrayList.class, response.getBody().getClass());
+        assertEquals(UserDTO.class, response.getBody().get(0).getClass());
+
+        assertEquals(ID, response.getBody().get(0).getId());
+        assertEquals(NAME, response.getBody().get(0).getName());
+        assertEquals(EMAIL, response.getBody().get(0).getEmail());
     }
 
     @Test
